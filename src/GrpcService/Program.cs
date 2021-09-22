@@ -1,27 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using GrpcService;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
-namespace GrpcService
+// not needed, W3C is now default
+// System.Diagnostics.Activity.DefaultIdFormat = System.Diagnostics.ActivityIdFormat.W3C;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddGrpc();
+
+builder.Services.AddOpenTelemetryTracing(builder =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
+    builder
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("GrpcService"))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddSource(nameof(GreeterService))
+        .AddZipkinExporter(options =>
         {
-            CreateHostBuilder(args).Build().Run();
-        }
+            options.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
+        });
+});
 
-        // Additional configuration is required to successfully run gRPC on macOS.
-        // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-}
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGrpcService<GreeterService>();
+
+    endpoints.MapGet("/", async context =>
+    {
+        await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+    });
+});
+
+app.Run();

@@ -1,26 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
-namespace WebClient
+// not needed, W3C is now default
+// System.Diagnostics.Activity.DefaultIdFormat = System.Diagnostics.ActivityIdFormat.W3C;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRazorPages();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddOpenTelemetryTracing(builder =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
+    builder
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("WebClient"))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddZipkinExporter(options =>
         {
-            CreateHostBuilder(args).Build().Run();
-        }
+            options.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
+        });
+});
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-}
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapRazorPages();
+});
+
+app.Run();

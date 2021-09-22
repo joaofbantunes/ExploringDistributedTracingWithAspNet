@@ -1,23 +1,20 @@
-using System.Threading.Tasks;
 using Grpc.Core;
-using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
-namespace GrpcService
+namespace GrpcService;
+
+public class GreeterService : Greeter.GreeterBase
 {
-    public class GreeterService : Greeter.GreeterBase
+    private static readonly ActivitySource ActivitySource = new(nameof(GreeterService));
+
+    public override async Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
     {
-        private readonly ILogger<GreeterService> _logger;
-        public GreeterService(ILogger<GreeterService> logger)
+        using (var x = ActivitySource.StartActivity(nameof(SayHello)))
         {
-            _logger = logger;
+            // something that takes a bit
+            await Task.Delay(TimeSpan.FromMilliseconds(250));
         }
 
-        public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
-        {
-            return Task.FromResult(new HelloReply
-            {
-                Message = "Hello " + request.Name
-            });
-        }
+        return new HelloReply { Message = "Hello " + request.Name };
     }
 }
