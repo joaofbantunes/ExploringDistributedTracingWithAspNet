@@ -18,7 +18,14 @@ builder.Services.AddOpenTelemetryTracing(builder =>
         .AddSource(nameof(GreeterService))
         .AddZipkinExporter(options =>
         {
-            options.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
+            // not needed, it's the default
+            //options.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
+        })
+        .AddJaegerExporter(options =>
+        {
+            // not needed, it's the default
+            //options.AgentHost = "localhost";
+            //options.AgentPort = 6831;
         });
 });
 
