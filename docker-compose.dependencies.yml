@@ -15,4 +15,10 @@ services:
       - "6831:6831/udp" # accepts jaeger.thrift over compact thrift protocol
       - "16686:16686" # ui
       # for more ports and information, check https://www.jaegertracing.io/docs/1.26/getting-started/
-
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # rabbit itself
+      - "15672:15672" # management ui

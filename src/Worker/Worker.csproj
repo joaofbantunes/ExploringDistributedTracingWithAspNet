@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Worker-544E6C2E-D3B8-4198-B323-3D1D47E687C0</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EasyNetQ" Version="7.0.0-beta1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0-rc.1.21451.13" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="OpenTelemetry.Api" Version="1.2.0-alpha3" />
+    <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0-alpha3" />
+    <PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.2.0-alpha3" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc7" />
+  </ItemGroup>
+</Project>

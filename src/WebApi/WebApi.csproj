@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EasyNetQ" Version="7.0.0-beta1" />
     <PackageReference Include="Google.Protobuf" Version="3.18.0" />
     <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.39.0" />
     <PackageReference Include="Grpc.Net.Client" Version="2.39.0" />
@@ -14,6 +15,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0-alpha3" />
     <PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.2.0-alpha3" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc7" />

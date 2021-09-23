@@ -1,5 +1,6 @@
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using WebApi;
 using static GrpcService.Greeter;
 
 // not needed, W3C is now default
@@ -18,8 +19,9 @@ builder.Services.AddOpenTelemetryTracing(builder =>
     builder
         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("WebApi"))
         .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
+        .AddHttpClientInstrumentation(options => options.Filter = request => request.RequestUri?.Port != 5004)
         .AddGrpcClientInstrumentation()
+        .AddSource(nameof(MessagePublisher))
         .AddZipkinExporter(options =>
         {
             // not needed, it's the default
@@ -33,6 +35,8 @@ builder.Services.AddOpenTelemetryTracing(builder =>
         });
 });
 
+builder.Services.AddSingleton<MessagePublisher>();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -40,13 +44,15 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapGet("/hello", async (string username, GreeterClient greeterClient) => 
+app.MapGet("/hello", async (string username, GreeterClient greeterClient, MessagePublisher messagePublisher) =>
 {
     var response = await greeterClient.SayHelloAsync(new GrpcService.HelloRequest { Name = username });
+    await messagePublisher.PublishAsync(new HelloMessage(response.Message));
     return new HelloResponse(response.Message);
 });
 
 app.Run();
 
-
 public record HelloResponse(string Greeting);
+
+public record HelloMessage(string Greeting);
