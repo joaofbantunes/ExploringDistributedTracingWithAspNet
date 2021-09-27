@@ -17,11 +17,13 @@ ASP.NET Core flows this trace context automatically, for example, including the 
 
 ### Logs
 
-The simplest way to see this in action is looking at the logs, as we can then see this information printed out (assuming the required logging configurations are made).
+The simplest way to see this in action is looking at the logs, as we can then see this information printed out.
+
+Even better than seeing things printed in the console, is to centralize the logs, then use the filters to find the logs we want. To see it in action, we're using [Seq](https://datalust.co/seq).
 
 ### OpenTelemetry, Zipkin and Jaeger
 
-A more interesting way to view this in action is to use other telemetry tools.
+Another interesting way to view this in action is to use other telemetry tools.
 
 For this sample, we'll use [OpenTelemetry](https://opentelemetry.io/), [Zipkin](https://zipkin.io/) and [Jaeger](https://www.jaegertracing.io/).
 
@@ -31,7 +33,7 @@ Zipkin and Jaeger, as mentioned before, are observability tools, where we can an
 
 ### Getting things running
 
-Before running the .NET applications, we need to have our dependencies up, which in this case are RabbitMQ, PostgreSQL, Zipkin and Jaeger. To get them all running, there's a Docker Compose file in the repository root, so we just need to execute:
+Before running the .NET applications, we need to have our dependencies up, which in this case are RabbitMQ, PostgreSQL, Seq, Zipkin and Jaeger. To get them all running, there's a Docker Compose file in the repository root, so we just need to execute:
 
 ```
 docker compose -f docker-compose.dependencies.yml up

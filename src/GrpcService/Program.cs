@@ -7,6 +7,7 @@ using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging(builder => builder.AddSeq());
 builder.Services.AddGrpc();
 
 builder.Services.AddOpenTelemetryTracing(builder =>

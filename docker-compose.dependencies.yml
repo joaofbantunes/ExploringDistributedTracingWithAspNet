@@ -31,3 +31,12 @@ services:
     environment:
         POSTGRES_USER: "user"
         POSTGRES_PASSWORD: "pass"
+  seq:
+    image: "datalust/seq:2021"
+    hostname: seq
+    container_name: seq
+    ports:
+      - "5341:5341" # ingestion API
+      - "5555:80" # ui
+    environment:
+        ACCEPT_EULA: "Y"

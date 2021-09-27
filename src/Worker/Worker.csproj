@@ -15,5 +15,6 @@
     <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0-alpha4" />
     <PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.2.0-alpha4" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc7" />
+    <PackageReference Include="Seq.Extensions.Logging" Version="6.1.0-dev-00091" />
   </ItemGroup>
 </Project>

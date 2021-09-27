@@ -7,6 +7,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddSingleton<IBus>(_ => RabbitHutch.CreateBus("host=localhost"));
+        services.AddLogging(builder => builder.AddSeq());
         services.AddOpenTelemetryTracing(builder =>
         {
             builder

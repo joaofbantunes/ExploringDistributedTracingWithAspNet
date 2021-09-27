@@ -10,6 +10,7 @@ using static GrpcService.Greeter;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging(builder => builder.AddSeq());
 builder.Services.AddControllers();
 builder.Services.AddGrpcClient<GreeterClient>(options =>
 {

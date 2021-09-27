@@ -6,6 +6,8 @@ using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging(builder => builder.AddSeq());
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient();
