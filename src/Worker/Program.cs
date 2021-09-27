@@ -6,7 +6,6 @@ using Worker;
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddHostedService<MessageHandler>();
         services.AddSingleton<IBus>(_ => RabbitHutch.CreateBus("host=localhost"));
         services.AddOpenTelemetryTracing(builder =>
         {
@@ -25,7 +24,11 @@ IHost host = Host.CreateDefaultBuilder(args)
                     //options.AgentPort = 6831;
                 });
         });
-
+        // OpenTelemetry adds an hosted service of its own, so we should register it before our hosted services,
+        // or we might start handing messages (or whatever our background service does) before tracing is up and running
+        // (noticed this as when I stopped this service and sent messages to the queue, the first message handled
+        // wouldn't show up in the traces)
+        services.AddHostedService<MessageHandler>();
     })
     .Build();
 
