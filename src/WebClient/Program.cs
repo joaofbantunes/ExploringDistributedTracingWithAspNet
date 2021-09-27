@@ -14,7 +14,9 @@ builder.Services.AddOpenTelemetryTracing(builder =>
 {
     builder
         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("WebClient"))
-        .AddAspNetCoreInstrumentation()
+        .AddAspNetCoreInstrumentation(
+            // if we wanted to ignore some specific requests, we could use the filter
+            options => options.Filter = httpContext => !httpContext.Request.Path.Value?.Contains("/_framework/aspnetcore-browser-refresh.js") ?? true)
         .AddHttpClientInstrumentation()
         .AddZipkinExporter(options =>
         {

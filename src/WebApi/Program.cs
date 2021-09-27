@@ -19,8 +19,10 @@ builder.Services.AddOpenTelemetryTracing(builder =>
     builder
         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("WebApi"))
         .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation(options => options.Filter = request => request.RequestUri?.Port != 5004)
-        .AddGrpcClientInstrumentation()
+        .AddHttpClientInstrumentation()
+        // to avoid double activity, one for HttpClient, another for the gRPC client
+        // -> https://github.com/open-telemetry/opentelemetry-dotnet/blob/core-1.1.0/src/OpenTelemetry.Instrumentation.GrpcNetClient/README.md#suppressdownstreaminstrumentation
+        .AddGrpcClientInstrumentation(options => options.SuppressDownstreamInstrumentation = true)
         .AddSource(nameof(MessagePublisher))
         .AddZipkinExporter(options =>
         {
