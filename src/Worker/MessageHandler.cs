@@ -32,7 +32,7 @@ public class MessageHandler : BackgroundService
                 Baggage.Current = parentContext.Baggage;
 
                 // start an activity
-                using var activity = ActivitySource.StartActivity("message receive", ActivityKind.Consumer, parentContext.ActivityContext);
+                using var activity = ActivitySource.StartActivity("message receive", ActivityKind.Consumer, parentContext.ActivityContext, tags: new[] { new KeyValuePair<string, object?>("server", Environment.MachineName) });
 
                 AddMessagingTags(activity, receivedInfo);
 

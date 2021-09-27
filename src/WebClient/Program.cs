@@ -17,7 +17,16 @@ builder.Services.AddOpenTelemetryTracing(builder =>
         .AddAspNetCoreInstrumentation(
             // if we wanted to ignore some specific requests, we could use the filter
             options => options.Filter = httpContext => !httpContext.Request.Path.Value?.Contains("/_framework/aspnetcore-browser-refresh.js") ?? true)
-        .AddHttpClientInstrumentation()
+        .AddHttpClientInstrumentation(
+            // we can hook into existing activities and customize them
+            options => options.Enrich = (activity, eventName, rawObject) =>
+            {
+                if(eventName == "OnStartActivity" && rawObject is System.Net.Http.HttpRequestMessage request && request.Method == HttpMethod.Get)
+                {
+                    activity.SetTag("RandomDemoTag", "Adding some random demo tag, just to see things working");
+                }
+            }
+        )
         .AddZipkinExporter(options =>
         {
             // not needed, it's the default
