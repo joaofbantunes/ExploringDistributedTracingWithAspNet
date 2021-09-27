@@ -15,7 +15,7 @@ builder.Services.AddOpenTelemetryTracing(builder =>
         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("GrpcService"))
         .AddAspNetCoreInstrumentation()
         .AddHttpClientInstrumentation()
-        .AddSource(nameof(GreeterService))
+        .AddSource(nameof(GreeterService)) // when we manually create activities, we need to setup the sources here
         .AddZipkinExporter(options =>
         {
             // not needed, it's the default

@@ -31,7 +31,7 @@ Zipkin and Jaeger, as mentioned before, are observability tools, where we can an
 
 ### Getting things running
 
-Before running the .NET applications, we need to have our dependencies up, which in this case are RabbitMQ, Zipkin and Jaeger. To get them all running, there's a Docker Compose file in the repository root, so we just need to execute:
+Before running the .NET applications, we need to have our dependencies up, which in this case are RabbitMQ, PostgreSQL, Zipkin and Jaeger. To get them all running, there's a Docker Compose file in the repository root, so we just need to execute:
 
 ```
 docker compose -f docker-compose.dependencies.yml up

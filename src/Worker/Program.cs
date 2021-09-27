@@ -11,7 +11,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         {
             builder
                 .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("Worker"))
-                .AddSource(nameof(MessageHandler))
+                .AddSource(nameof(MessageHandler)) // when we manually create activities, we need to setup the sources here
                 .AddZipkinExporter(options =>
                 {
                     // not needed, it's the default
